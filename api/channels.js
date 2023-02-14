@@ -23,7 +23,9 @@ export default async function channels (req, res) {
             conversations[channel.name] = {
                 id: channel.id,
                 name: channel.name,
-                members: channel.num_members
+                members: channel.num_members,
+                archived: channel.is_archived,
+                topic: channel.topic?.value
             };
         }
         lastFetched = await fetch(lastFetched.response_metadata.next_cursor);
@@ -33,7 +35,9 @@ export default async function channels (req, res) {
         conversations[channel.name] = {
             id: channel.id,
             name: channel.name,
-            members: channel.num_members
+            members: channel.num_members,
+            archived: channel.is_archived,
+            topic: channel.topic?.value
         };
     }
 
