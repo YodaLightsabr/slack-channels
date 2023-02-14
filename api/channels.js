@@ -18,6 +18,20 @@ export default async function channels (req, res) {
 
     let lastFetched = await fetch();
 
+    const topicTransform = topic => {
+        if (!topic) return '';
+
+        topic = topic.split('&amp;').join('&');
+
+        const matches = topic.match(/:[^:\s]*(?:::[^:\s]*)*:/g) ?? [];
+
+        for (const match of matches) {
+            topic = topic.replace(match, '');
+        }
+
+        return topic;
+    };
+
     while (lastFetched?.response_metadata?.next_cursor) {
         for (const channel of lastFetched.channels) {
             conversations[channel.name] = {
@@ -25,7 +39,7 @@ export default async function channels (req, res) {
                 name: channel.name,
                 members: channel.num_members,
                 archived: channel.is_archived,
-                topic: channel.topic?.value
+                topic: topicTransform(channel.topic?.value)
             };
         }
         lastFetched = await fetch(lastFetched.response_metadata.next_cursor);
@@ -37,7 +51,7 @@ export default async function channels (req, res) {
             name: channel.name,
             members: channel.num_members,
             archived: channel.is_archived,
-            topic: channel.topic?.value
+            topic: topicTransform(channel.topic?.value)
         };
     }
 
