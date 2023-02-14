@@ -29,6 +29,12 @@ export default async function channels (req, res) {
             topic = topic.replace(match, '');
         }
 
+        const channelMatches = topic.match(/<#C.*?\|.*?>/g) ?? [];
+
+        for (const match of channelMatches) {
+            topic = topic.replace(match, '#' + match.split('|').reverse().map(a => a.substring(0, a.length - 1))[0]);
+        }
+
         return topic;
     };
 
