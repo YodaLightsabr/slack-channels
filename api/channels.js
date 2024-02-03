@@ -8,7 +8,7 @@ export default async function channels (req, res) {
     const web = keys.includes(token) ? new WebClient(process.env.BOT_TOKEN) :
         userScopedToken ? new WebClient(userScopedToken) : null;
 
-    if (!keys.includes(token)) return res.status(401).json({ error: 'Unauthorized' });
+    if (!web) return res.status(401).json({ error: 'Unauthorized' });
 
     const conversations = {};
     
