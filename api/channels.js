@@ -2,11 +2,13 @@ import { WebClient } from '@slack/web-api';
 
 export default async function channels (req, res) {
     const keys = process.env.KEYS.split(',');
+    const userScopedToken = req.query.userScopedToken || req.body?.userScopedToken || req.headers['userScopedToken']?.substring?.(7);
     const token = req.query.token || req.body?.token || req.headers['authorization']?.substring?.(7);
 
-    if (!keys.includes(token)) return res.status(401).json({ error: 'Unauthorized' });
+    const web = keys.includes(token) ? new WebClient(process.env.BOT_TOKEN) :
+        userScopedToken ? new WebClient(userScopedToken) : null;
 
-    const web = new WebClient(process.env.BOT_TOKEN);
+    if (!keys.includes(token)) return res.status(401).json({ error: 'Unauthorized' });
 
     const conversations = {};
     
