@@ -5,10 +5,15 @@ export default async function channels (req, res) {
     const userScopedToken = req.query.userScopedToken || req.body?.userScopedToken || req.headers['userScopedToken']?.substring?.(7);
     const token = req.query.token || req.body?.token || req.headers['authorization']?.substring?.(7);
 
+    console.log({
+        userScopedToken,
+        token
+    })
+
     const web = keys.includes(token) ? new WebClient(process.env.BOT_TOKEN) :
         userScopedToken ? new WebClient(userScopedToken) : null;
 
-    if (!web) return res.status(401).json({ error: 'Unauthorized' });
+    if (!web) return res.status(401).json({ error: 'Unauthorized, C1' });
 
     const conversations = {};
     
