@@ -47,7 +47,8 @@ export default async function channels (req, res) {
                 name: channel.name,
                 members: channel.num_members,
                 archived: channel.is_archived,
-                topic: topicTransform(channel.topic?.value)
+                topic: topicTransform(channel.topic?.value),
+                private: channel.is_private
             };
         }
         lastFetched = await fetch(lastFetched.response_metadata.next_cursor);
