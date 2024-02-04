@@ -14,6 +14,7 @@ export default async function channels (req, res) {
     const fetch = cursor => (console.log('fetching'), web.conversations.list({
         team_id: 'T0266FRGM',
         limit: 500,
+        types: 'public_channel,' + userScoped ? 'private_channel' : '',
         ...(cursor ? { cursor } : {})
     }));
 
